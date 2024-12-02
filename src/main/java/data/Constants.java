@@ -1,4 +1,4 @@
-package utils;
+package data;
 
 import com.github.javafaker.Faker;
 
@@ -46,7 +46,7 @@ public class Constants {
     public static String PHONE_CODE = "PhoneCode";
     public static String FIRSTNAME = "firstname";
     public static String LASTNAME = "lastname";
-    public static String BIRTH_YEAR = "birth_year";
+    public static String BIRTH_YEAR = "//span[contains(@class, 'select2-selection--single')]";
     public static String PHONE = "phone";
     public static String CINEMA = "//p[contains(text(), 'კინო')]";
     public static String IST_POINT = "//h3[contains(text(), 'კავეა ისთ ფოინთი')]";
@@ -68,5 +68,11 @@ public class Constants {
     public static String CATEGORY_CHAIN_ELEMENTS = ".//a[contains(@data-testid, 'breadcrumb-link')]";
     public static String CATEGORY_CHAIN = "//nav[contains(@class, 'flex-nowrap whitespace-nowrap')]";
     public static String  LOGO = "//img[@alt='swoop']\n";
+    public static String movieName = "//h1[contains(@class, 'text-xl') and contains(@class, 'text-white')]\n";
+    public static String time = ".//p[contains(@class, 'text-lg')]";
+    public static String date = ".//p[contains(@class, 'leading-5')]";
+    public static String POPUP_MOVIE = "h2.text-primary_black-100-value.text-md.leading-5.font-tbcx-bold";
+    public static String POPUP_DATE_TIME = "//p[contains(@class, 'text-2sm') and contains(@class, 'text-primary_black-90-value') and contains(text(), ':')]";
+    public static String FREE_SEAT_COLOR = "//div[contains(@class, 'w-2.5 h-2.5 rounded-full bg-primary_green-100-value')]";
 
 }

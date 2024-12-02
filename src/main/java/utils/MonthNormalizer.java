@@ -1,13 +1,11 @@
 package utils;
-
 import java.util.HashMap;
 import java.util.Map;
 
 public class MonthNormalizer {
-    public static void main(String[] args) {
-        Map<String, String> monthNormalization = new HashMap<>();
 
-        // Full month name to shortened form mappings
+    public static String normalizeMonth(String dateText) {
+        Map<String, String> monthNormalization = new HashMap<>();
         monthNormalization.put("იანვარი", "იან");
         monthNormalization.put("თებერვალი", "თებ");
         monthNormalization.put("მარტი", "მარ");
@@ -21,13 +19,10 @@ public class MonthNormalizer {
         monthNormalization.put("ნოემბერი", "ნოე");
         monthNormalization.put("დეკემბერი", "დეკ");
 
-        // Example usage
-        String dateTextBefore = "3 დეკემბერი"; // Example input
         for (Map.Entry<String, String> entry : monthNormalization.entrySet()) {
-            dateTextBefore = dateTextBefore.replace(entry.getKey(), entry.getValue());
+            dateText = dateText.replace(entry.getKey(), entry.getValue());
         }
 
-        System.out.println("Normalized Date: " + dateTextBefore); // Output: "3 დეკ"
+        return dateText;
     }
 }
-
