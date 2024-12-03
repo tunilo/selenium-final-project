@@ -21,7 +21,9 @@ public class MoviePageTests extends BaseTest {
         helper.clickAndWait( wait.until(ExpectedConditions.elementToBeClickable(By.xpath(Constants.CINEMA))));
 
         String CAVEA_EAST_POINT = "//label[@for='4291']";
-        WebElement Cavea_East_Point = driver.findElement(By.xpath(CAVEA_EAST_POINT));
+        WebElement Cavea_East_Point = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath(CAVEA_EAST_POINT )
+        ));
         wait.until(ExpectedConditions.elementToBeClickable(Cavea_East_Point));
 
         wait.until(ExpectedConditions.invisibilityOfElementLocated(
@@ -29,9 +31,8 @@ public class MoviePageTests extends BaseTest {
         ));
 
         helper.clickAndWait(Cavea_East_Point);
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//img[@alt='კავეა ისთ ფოინთი']")));
 
-        Thread.sleep(2000);   //ეს უეჭ ინტერნეტის ბრალია, ხან ასრებს ის ფილმები ჩატვირთვას ხან ვერა "დდდდ
-        // ესეც დაჭირდა ძველი პირველი ელემენტი რო არ წამოღოს
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//div[contains(@class, 'w-full') and contains(@class, 'group')]//a)")));
         WebElement firstFilmImage = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.cssSelector("div.w-full.group a")
@@ -111,12 +112,35 @@ public class MoviePageTests extends BaseTest {
         WebElement birthYearDropdown = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath(Constants.BIRTH_YEAR)
         ));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(Constants.BIRTH_YEAR)));
+
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", birthYearDropdown);
-        //((JavascriptExecutor) driver).executeScript("window.scrollBy(0, -100);");
         wait.until(ExpectedConditions.visibilityOf(birthYearDropdown));
         wait.until(ExpectedConditions.elementToBeClickable(birthYearDropdown));
-        Thread.sleep(100);
-        birthYearDropdown.click();
+         Thread.sleep(100); // აი ამას ვერაფერი მოვუხერხე :დ
+         try {
+             birthYearDropdown.click();
+         } catch (Exception e) {
+             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", birthYearDropdown);
+         }
+
+        //აი სლიფის გარეშე თავს იკლავს და არ სქროლავს როცა ერთად ვუშვებ
+//        wait.until(driver -> {
+//            try {
+//                if (!birthYearDropdown.isDisplayed())    ((JavascriptExecutor) driver).executeScript("window.scrollBy(0, 100);");
+//                return birthYearDropdown.isDisplayed() ;
+//            } catch (Exception ex) {
+//                return false;
+//            }
+//        });
+//        try {
+//            birthYearDropdown.click();
+//        } catch (Exception e) {
+//            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", birthYearDropdown);
+//        }
+
+
+
         WebElement yearOption = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//li[contains(@class, 'select2-results__option') and text()='" + Constants.yearOfBirth_input + "']")
         ));
