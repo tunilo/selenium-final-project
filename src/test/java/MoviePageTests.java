@@ -114,7 +114,11 @@ public class MoviePageTests extends BaseTest {
         ));
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(Constants.BIRTH_YEAR)));
 
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", birthYearDropdown);
+
+        ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].scrollIntoView({ behavior: 'smooth', block: 'center' });",
+                birthYearDropdown
+        );
         wait.until(ExpectedConditions.visibilityOf(birthYearDropdown));
         wait.until(ExpectedConditions.elementToBeClickable(birthYearDropdown));
          Thread.sleep(100); // აი ამას ვერაფერი მოვუხერხე :დ
@@ -146,9 +150,6 @@ public class MoviePageTests extends BaseTest {
         ));
         yearOption.click();
 
-        WebElement phoneField = wait.until(ExpectedConditions.elementToBeClickable(By.name(Constants.PHONE)));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", phoneField);
-        phoneField.sendKeys(Constants.phoneNumber_input);
 
         WebElement phoneCodeField = wait.until(ExpectedConditions.elementToBeClickable(By.id(Constants.PHONE_CODE)));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", phoneCodeField);
