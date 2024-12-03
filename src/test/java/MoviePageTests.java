@@ -8,6 +8,7 @@ import org.testng.annotations.Test;
 import data.Constants;
 import utils.MonthNormalizer;
 
+import java.sql.Driver;
 import java.time.Duration;
 import java.util.List;
 
@@ -15,20 +16,39 @@ public class MoviePageTests extends BaseTest {
     @Test
     public void moveTest() throws InterruptedException {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        Actions actions = new Actions(driver);
         String currentURL = driver.getCurrentUrl();
         driver.get(Constants.SWOOP_HOME_URL);
         wait.until(ExpectedConditions.not(ExpectedConditions.urlToBe(currentURL)));
 
+        currentURL = driver.getCurrentUrl();
         wait.until(ExpectedConditions.elementToBeClickable(By.xpath(Constants.CINEMA))).click();
-        WebElement firstFilmImage = wait.until(ExpectedConditions.elementToBeClickable(
+        wait.until(ExpectedConditions.not(ExpectedConditions.urlToBe(currentURL)));
+
+        currentURL = driver.getCurrentUrl();
+        String CAVEA_EAST_POINT = "//label[@for='4291']";
+
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath(CAVEA_EAST_POINT)));
+        WebElement Cavea_East_Point = driver.findElement(By.xpath(CAVEA_EAST_POINT));
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath(CAVEA_EAST_POINT)));
+
+        Cavea_East_Point.click();
+        wait.until(ExpectedConditions.not(ExpectedConditions.urlToBe(currentURL)));
+
+        Thread.sleep(1000);   //ეს უეჭ ინტერნეტის ბრალია, ხან ასრებს ის ფილმები ჩატვირთვას ხან ვერა "დდდდ
+
+        WebElement firstFilmImage = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.cssSelector("div.w-full.group a")
         ));
-        currentURL = driver.getCurrentUrl();
+
+        //just try second film
+        //WebElement firstFilmImage = wait.until(ExpectedConditions.elementToBeClickable(By.xpath ("(//div[contains(@class, 'w-full') and contains(@class, 'group')]//a)[2]\n")));
+
+                currentURL = driver.getCurrentUrl();
         String filmImageURL = firstFilmImage.getAttribute("href");
 
         driver.navigate().to(filmImageURL);
         wait.until(ExpectedConditions.not(ExpectedConditions.urlToBe(currentURL)));
-        Actions actions = new Actions(driver);
         WebElement targetElement = wait.until(ExpectedConditions.presenceOfElementLocated(
                 By.xpath(Constants.IST_POINT)
         ));
@@ -116,7 +136,7 @@ public class MoviePageTests extends BaseTest {
         //((JavascriptExecutor) driver).executeScript("window.scrollBy(0, -100);");
         wait.until(ExpectedConditions.visibilityOf(birthYearDropdown));
         wait.until(ExpectedConditions.elementToBeClickable(birthYearDropdown));
-        //Thread.sleep(100);
+        Thread.sleep(100);
         birthYearDropdown.click();
 
         WebElement yearOption = wait.until(ExpectedConditions.elementToBeClickable(
