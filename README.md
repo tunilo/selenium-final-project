@@ -7,7 +7,6 @@ I  DID IT!!! 🎉🎉 **21/21 tests passed!** 🏆 (გეფიცებით 
 I’m officially the Selenium wizard 🧙‍♂️ (ეს 21/21 რო დაწერა მაშინ გადავწყვიტე)
 
 My Selenium project now stands victorious—like a battle-scarred warrior, with thousands of `stale element exceptions` and hundreds of XPath tears behind me. 🥹💻
-But let’s be real: none of this would’ve been possible without your guidance, endless patience, and… subtle hints that I was clearly overcomplicating things. 😅  
 
 Through this rollercoaster of a project 🎢, I’ve experienced:
 - Sleepless nights 🛌➕💻 (არადა დრო იყო 11 ზე მეძინა)
