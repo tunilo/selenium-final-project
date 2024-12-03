@@ -49,7 +49,7 @@ public class Constants {
     public static String BIRTH_YEAR = "//span[contains(@class, 'select2-selection--single')]";
     public static String PHONE = "phone";
     public static String CINEMA = "//p[contains(text(), 'კინო')]";
-    public static String IST_POINT = "//h3[contains(text(), 'კავეა ისთ ფოინთი')]";
+    public static String EAST_POINT = "//h3[contains(text(), 'კავეა ისთ ფოინთი')]";
     public static String LAST_OPTION = "//h3[contains(text(), 'კავეა ისთ ფოინთი')]/ancestor::div[contains(@class, 'flex')]/descendant::div[contains(@class, 'cursor-pointer')][last()]";
     public static String FREE_PLACE = "//*[local-name()='svg' and .//*[local-name()='path' and @fill='#8ECC69']]";
     public static String NEW_ACCOUNT = "//a[contains(text(), 'შექმენი')]";

@@ -6,6 +6,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import data.Constants;
+import utils.HelperFunctions;
 
 import java.time.Duration;
 import java.util.List;
@@ -14,9 +15,8 @@ public class LandingPageTests extends BaseTest {
     @Test
     public void activeCategoryTest() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        String currentURL = driver.getCurrentUrl();
-        driver.get(Constants.SWOOP_HOME_URL);
-        wait.until(ExpectedConditions.not(ExpectedConditions.urlToBe(currentURL)));
+        HelperFunctions helper = new HelperFunctions(driver);
+        helper.loadHomePage();
 
         wait.until(ExpectedConditions.elementToBeClickable(By.xpath(Constants.CATEGORIES))).click();
         WebElement sportElement = driver.findElement(By.xpath(Constants.SPORT));
@@ -41,21 +41,14 @@ public class LandingPageTests extends BaseTest {
         Assert.assertTrue(kartingiFound);
     }
     @Test
-    public void logoTest() throws InterruptedException {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    public void logoTest(){
+        HelperFunctions helper = new HelperFunctions(driver);
+
+        helper.loadHomePage();
+        helper.clickAndWait(driver.findElement(By.xpath(Constants.HOLIDAY_PAGE_LINK)));
+        helper.clickAndWait(driver.findElement(By.xpath(Constants.LOGO)));
+
         String currentURL = driver.getCurrentUrl();
-        driver.get(Constants.SWOOP_HOME_URL);
-        wait.until(ExpectedConditions.not(ExpectedConditions.urlToBe(currentURL)));
-        currentURL = driver.getCurrentUrl();
-        driver.findElement(By.xpath(Constants.HOLIDAY_PAGE_LINK)).click();
-        wait.until(ExpectedConditions.not(ExpectedConditions.urlToBe(currentURL)));
-
-        currentURL = driver.getCurrentUrl();
-         Thread.sleep(2000);
-        wait.until(ExpectedConditions.elementToBeClickable(By.xpath(Constants.LOGO))).click();
-        wait.until(ExpectedConditions.not(ExpectedConditions.urlToBe(currentURL)));
-
-        currentURL = driver.getCurrentUrl();
         System.out.println(currentURL);
         Assert.assertEquals(currentURL, Constants.SWOOP_HOME_URL);
     }

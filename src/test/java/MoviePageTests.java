@@ -1,14 +1,13 @@
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import data.Constants;
+import utils.HelperFunctions;
 import utils.MonthNormalizer;
 
-import java.sql.Driver;
 import java.time.Duration;
 import java.util.List;
 
@@ -17,42 +16,32 @@ public class MoviePageTests extends BaseTest {
     public void moveTest() throws InterruptedException {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         Actions actions = new Actions(driver);
-        String currentURL = driver.getCurrentUrl();
-        driver.get(Constants.SWOOP_HOME_URL);
-        wait.until(ExpectedConditions.not(ExpectedConditions.urlToBe(currentURL)));
+        HelperFunctions helper = new HelperFunctions(driver);
+        helper.loadHomePage();
+        helper.clickAndWait( wait.until(ExpectedConditions.elementToBeClickable(By.xpath(Constants.CINEMA))));
 
-        currentURL = driver.getCurrentUrl();
-        wait.until(ExpectedConditions.elementToBeClickable(By.xpath(Constants.CINEMA))).click();
-        wait.until(ExpectedConditions.not(ExpectedConditions.urlToBe(currentURL)));
-
-        currentURL = driver.getCurrentUrl();
         String CAVEA_EAST_POINT = "//label[@for='4291']";
-
-        wait.until(ExpectedConditions.elementToBeClickable(By.xpath(CAVEA_EAST_POINT)));
         WebElement Cavea_East_Point = driver.findElement(By.xpath(CAVEA_EAST_POINT));
-        wait.until(ExpectedConditions.elementToBeClickable(By.xpath(CAVEA_EAST_POINT)));
+        wait.until(ExpectedConditions.elementToBeClickable(Cavea_East_Point));
 
-        Cavea_East_Point.click();
-        wait.until(ExpectedConditions.not(ExpectedConditions.urlToBe(currentURL)));
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.cssSelector("div.fixed.min-w-screen.min-h-screen.bg-white\\/50")
+        ));
 
-        Thread.sleep(1000);   //ეს უეჭ ინტერნეტის ბრალია, ხან ასრებს ის ფილმები ჩატვირთვას ხან ვერა "დდდდ
+        helper.clickAndWait(Cavea_East_Point);
 
+        Thread.sleep(2000);   //ეს უეჭ ინტერნეტის ბრალია, ხან ასრებს ის ფილმები ჩატვირთვას ხან ვერა "დდდდ
+        // ესეც დაჭირდა ძველი პირველი ელემენტი რო არ წამოღოს
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//div[contains(@class, 'w-full') and contains(@class, 'group')]//a)")));
         WebElement firstFilmImage = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.cssSelector("div.w-full.group a")
         ));
+        helper.clickAndWait(firstFilmImage);
 
-        //just try second film
-        //WebElement firstFilmImage = wait.until(ExpectedConditions.elementToBeClickable(By.xpath ("(//div[contains(@class, 'w-full') and contains(@class, 'group')]//a)[2]\n")));
-
-                currentURL = driver.getCurrentUrl();
-        String filmImageURL = firstFilmImage.getAttribute("href");
-
-        driver.navigate().to(filmImageURL);
-        wait.until(ExpectedConditions.not(ExpectedConditions.urlToBe(currentURL)));
         WebElement targetElement = wait.until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath(Constants.IST_POINT)
+                By.xpath(Constants.EAST_POINT)
         ));
-        String movieNameBefore =  driver.findElement(By.xpath(Constants.movieName)).getText();
+        String movieNameBefore = driver.findElement(By.xpath(Constants.movieName)).getText();
 
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", targetElement);
         ((JavascriptExecutor) driver).executeScript("window.scrollBy(0, -100);");
@@ -61,9 +50,8 @@ public class MoviePageTests extends BaseTest {
         WebElement lastOption = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(Constants.LAST_OPTION)));
         String timeTextBefore = lastOption.findElement(By.xpath(Constants.time)).getText();
         String dateTextBefore = lastOption.findElement(By.xpath(Constants.date)).getText();
-        currentURL = driver.getCurrentUrl();
-        lastOption.click();
-        wait.until(ExpectedConditions.not(ExpectedConditions.urlToBe(currentURL)));
+
+        helper.clickAndWait(lastOption);
 
         WebElement movieNameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(Constants.POPUP_MOVIE)));
         String popUpMovieName = movieNameElement.getText();
@@ -81,11 +69,8 @@ public class MoviePageTests extends BaseTest {
         Assert.assertEquals(MonthNormalizer.normalizeMonth(dateTextBefore), MonthNormalizer.normalizeMonth(popUpDateText));
         Assert.assertEquals(popUpMovieName, movieNameBefore);
 
-
         List<WebElement> freeSeats = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(Constants.FREE_PLACE)));
-
         WebElement element = driver.findElement(By.xpath(Constants.FREE_SEAT_COLOR));
-
 
         String color = element.getCssValue("background-color");
         String seatColor = "";
@@ -96,36 +81,30 @@ public class MoviePageTests extends BaseTest {
             freeSeats.get(0).click();
         }
 
-   try{
-       Assert.assertEquals(color, seatColor);
-   }catch(AssertionError e){
-           System.out.println("Colors are not the same " + e.getMessage());
+        try {
+            Assert.assertEquals(color, seatColor);
+        } catch (AssertionError e) {
+            System.out.println("Colors are not the same " + e.getMessage());
         }
 
         WebElement newAccountButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(Constants.NEW_ACCOUNT)));
         newAccountButton.click();
 
-// Fill in the email
         WebElement emailField = wait.until(ExpectedConditions.elementToBeClickable(By.name(Constants.EMAIL)));
         emailField.sendKeys(Constants.email_input);
 
-// Fill in the password
         WebElement passwordField = wait.until(ExpectedConditions.elementToBeClickable(By.name(Constants.PASSWORD)));
         passwordField.sendKeys(Constants.password_input);
 
-// Fill in the conform password
         WebElement confirmPasswordField = wait.until(ExpectedConditions.elementToBeClickable(By.name(Constants.PASSWORD_RETYPE)));
         confirmPasswordField.sendKeys(Constants.password_input);
 
-// Select gender
         WebElement genderFemale = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(Constants.GENDER)));
         genderFemale.click();
 
-// Fill in the first name
         WebElement firstNameField = wait.until(ExpectedConditions.elementToBeClickable(By.name(Constants.FIRSTNAME)));
         firstNameField.sendKeys(Constants.firstName_input);
 
-// Fill in the last name
         WebElement lastNameField = wait.until(ExpectedConditions.elementToBeClickable(By.name(Constants.LASTNAME)));
         lastNameField.sendKeys(Constants.lastName_input);
 
@@ -138,29 +117,23 @@ public class MoviePageTests extends BaseTest {
         wait.until(ExpectedConditions.elementToBeClickable(birthYearDropdown));
         Thread.sleep(100);
         birthYearDropdown.click();
-
         WebElement yearOption = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//li[contains(@class, 'select2-results__option') and text()='" + Constants.yearOfBirth_input + "']")
         ));
         yearOption.click();
 
-        // Fill in the phone number
         WebElement phoneField = wait.until(ExpectedConditions.elementToBeClickable(By.name(Constants.PHONE)));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", phoneField);
         phoneField.sendKeys(Constants.phoneNumber_input);
 
-        // Fill in the phone code
         WebElement phoneCodeField = wait.until(ExpectedConditions.elementToBeClickable(By.id(Constants.PHONE_CODE)));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", phoneCodeField);
         phoneCodeField.sendKeys(Constants.phoneCode_input);
 
-        // Agree to terms and conditions
         WebElement termsCheckbox = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(Constants.RULES_CHECKMARK)));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", termsCheckbox);
-
         actions.moveToElement(termsCheckbox).click().perform();
 
-        // Agree to policy
         WebElement policyCheckbox = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(Constants.TBC_TERMS)));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", policyCheckbox);
         actions.moveToElement(policyCheckbox).click().perform();

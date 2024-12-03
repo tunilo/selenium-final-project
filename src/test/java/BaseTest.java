@@ -14,7 +14,7 @@ public class BaseTest {
 
     @Parameters("browser")
     @BeforeClass
-    public void setUp(@Optional("chrome") String browser) {
+    public void setUp(@Optional("firefox") String browser) {
         if (browser.equalsIgnoreCase("chrome")) {
             WebDriverManager.chromedriver().setup();
             driver = new ChromeDriver();
@@ -24,6 +24,9 @@ public class BaseTest {
         } else if (browser.equalsIgnoreCase("edge")) {
             WebDriverManager.edgedriver().setup();
             driver = new EdgeDriver();
+        }
+        else {
+            throw new IllegalArgumentException("Unsupported browser: " + browser);
         }
         driver.manage().window().maximize();
     }
